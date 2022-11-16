@@ -76,6 +76,9 @@ public class BleBroadcastActivity extends AppCompatActivity implements View.OnCl
         btnNotify.setOnClickListener(this);
         btnStart.setOnClickListener(this);
         btnStop.setOnClickListener(this);
+
+        btnNotify.setVisibility(View.INVISIBLE);
+        //btnStop.setVisibility(View.INVISIBLE);
     }
 
 

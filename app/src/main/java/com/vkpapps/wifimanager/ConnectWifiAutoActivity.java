@@ -517,14 +517,7 @@ public class ConnectWifiAutoActivity extends Activity {
 
                         String hex = ByteUtil.byteToHexString(bleDevice.getScanRecord());
 
-                        StringBuilder stringBuilder=new StringBuilder();
-                        stringBuilder.append("ABCD");
-                        stringBuilder.append(StringUtil.BLE_PREFIX);
-                        stringBuilder.append("df321e62b5d5");
-                        Log.e(TAG, "自定义数据：hex："+stringBuilder.toString());
 
-                        byte [] bytesTest=  (stringBuilder.toString().getBytes(StandardCharsets.UTF_8));
-                        hex=ByteUtil.byteToHexString(bytesTest);
 
                         //if(hex.contains("010101010101010101010101010101")){
                         //if(hex.contains("020202020202020202020202020202")){
@@ -602,6 +595,8 @@ public class ConnectWifiAutoActivity extends Activity {
                 // do success processing here..
 
                 Toast.makeText(getApplicationContext(), "连接成功"  , Toast.LENGTH_LONG).show();
+
+
             }
 
             @Override
