@@ -1,0 +1,4 @@
+include ':APManager'
+include ':app'
+include ':FastBleLib'
+rootProject.name = "WifiManager"

@@ -1,3 +1,1 @@
-# hotspot-demo
-
-前端pad测试热点使用
+pad服务端，热点开启

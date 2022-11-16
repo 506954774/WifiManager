@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.vkpapps.wifimanager">
+
+
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.NETWORK_SETUP_WIZARD"/>
+    <uses-permission android:name="android.permission.NETWORK_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+
+    <application
+        android:allowBackup="false"
+        android:fullBackupOnly="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.WifiManager"
+        tools:ignore="AllowBackup">
+        <activity
+            android:name=".APDetailActivity"
+            android:label="AP Detail"/>
+        <activity
+            android:name=".MainActivity"
+            android:label="Create AP">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ConnectWifiActivity"
+            android:label="连接wifi">
+
+        </activity>
+        <activity
+            android:name=".ConnectWifiAutoActivity"
+            android:label="扫描蓝牙广播自动连接wifi">
+
+        </activity>
+
+        <activity
+            android:name=".BleBroadcastActivity"
+            android:label="发出蓝牙广播">
+
+
+
+        </activity>
+
+    </application>
+
+</manifest>

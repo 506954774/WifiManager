@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_margin="10dp"
+        app:cardCornerRadius="10dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/txt_device"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+
+                 />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_marginTop="20dp"
+                android:id="@+id/btn_start"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:gravity="center"
+
+                android:text="start"
+                android:background="@color/teal_700"
+                android:textColor="@color/white"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_marginTop="20dp"
+                android:id="@+id/btn_notify"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:gravity="center"
+
+                android:text="notify"
+                android:background="@color/teal_700"
+                android:textColor="@color/white"/>
+
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_marginTop="20dp"
+                android:id="@+id/btn_stop"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+
+                android:gravity="center"
+                android:text="stop"
+                android:background="@color/teal_700"
+                android:textColor="@color/white"/>
+
+
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+</RelativeLayout>
