@@ -1,5 +1,7 @@
 package com.vkpapps.wifimanager;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -8,6 +10,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -23,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements APManager.OnSucce
 
     private static final int PERMISSION_REQUESTS = 1;
     private static final int ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION = 110;
+    private int GO2OpenBluetooth=220;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +37,7 @@ public class MainActivity extends AppCompatActivity implements APManager.OnSucce
             //获取权限
             if (allPermissionsGranted()) {
 
-                APManager apManager = APManager.getApManager(this);
-                apManager.turnOnHotspot(this,
-                        this,
-                        new DefaultFailureListener(this)
-                );
+                creatHotspot();
 
             } else {
                 getRuntimePermissions();
@@ -88,6 +88,24 @@ public class MainActivity extends AppCompatActivity implements APManager.OnSucce
         });
 
 
+    }
+
+    private void creatHotspot(){
+        BluetoothManager systemService = (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
+        BluetoothAdapter mBluetoothAdapter = systemService.getAdapter();
+
+        if(!mBluetoothAdapter.isEnabled()){
+            Toast.makeText(getApplicationContext(),"请先打开蓝牙",Toast.LENGTH_SHORT).show();
+            Intent enabler =new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enabler,GO2OpenBluetooth);
+            return;
+        }
+
+        APManager apManager = APManager.getApManager(this);
+        apManager.turnOnHotspot(this,
+                this,
+                new DefaultFailureListener(this)
+        );
     }
 
     private void go2ConnectWifiAuto(){
@@ -154,50 +172,20 @@ public class MainActivity extends AppCompatActivity implements APManager.OnSucce
 
     private String[] getRequiredPermissions() {
         try {
-           
 
-            /***
-             *
-             *
-             [android.permission.INTERNET,
-             android.permission.WRITE_EXTERNAL_STORAGE,
-             android.permission.READ_EXTERNAL_STORAGE,
-             android.permission.CAMERA,
-             android.permission.MANAGE_EXTERNAL_STORAGE,
-             android.permission.ACCESS_NETWORK_STATE
-             ]
-             */
             String[] result=null;
            // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            if (1==2) {
 
+            result= new String[]{
+                    "android.permission.ACCESS_NETWORK_STATE",
+                    "android.permission.ACCESS_FINE_LOCATION",
+                    "android.permission.ACCESS_COARSE_LOCATION",
+                    "android.permission.BLUETOOTH",
+                    "android.permission.BLUETOOTH_ADMIN",
 
+            };
 
-                result= new String[]{
-                        "android.permission.ACCESS_NETWORK_STATE",
-                        "android.permission.ACCESS_FINE_LOCATION",
-                        "android.permission.ACCESS_COARSE_LOCATION",
-                        //"android.permission.BLUETOOTH",
-                       // "android.permission.BLUETOOTH_ADMIN",
-                };
-
-                Log.i("getRequiredPermissions", Arrays.toString(result));
-
-
-            } else {
-                result= new String[]{
-                        "android.permission.ACCESS_NETWORK_STATE",
-                        "android.permission.ACCESS_FINE_LOCATION",
-                        "android.permission.ACCESS_COARSE_LOCATION",
-                        "android.permission.BLUETOOTH",
-                        "android.permission.BLUETOOTH_ADMIN",
-
-
-                };
-
-                Log.i("getRequiredPermissions", Arrays.toString(result));
-
-            }
+            Log.i("getRequiredPermissions", Arrays.toString(result));
 
             return result;
 
@@ -206,5 +194,11 @@ public class MainActivity extends AppCompatActivity implements APManager.OnSucce
         }
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(GO2OpenBluetooth==requestCode){
+            creatHotspot();
+        }
+    }
 }
