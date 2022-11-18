@@ -291,7 +291,7 @@ public class ConnectWifiAutoActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         /*销毁时注销广播*/
-        unregisterReceiver(wifiReceiver);
+        //unregisterReceiver(wifiReceiver);
 
         BleManager.getInstance().disconnectAllDevice();
         BleManager.getInstance().destroy();

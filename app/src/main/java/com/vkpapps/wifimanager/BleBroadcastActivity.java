@@ -109,10 +109,15 @@ public class BleBroadcastActivity extends AppCompatActivity implements View.OnCl
         findViewById(R.id.btnTurnOff).setOnClickListener(v -> {
             apManager.disableWifiAp();
             stopAdvertise();
+            WifiPasswordHolder.getInstance().setPassword(null);
             finish();
         });
     }
 
+    @Override
+    public void onBackPressed() {
+
+    }
 
     /**
      * 初始化蓝牙
