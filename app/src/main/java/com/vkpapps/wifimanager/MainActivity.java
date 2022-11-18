@@ -124,7 +124,9 @@ public class MainActivity extends AppCompatActivity implements APManager.OnSucce
     @Override
     public void onSuccess(@NonNull String ssid, @NonNull String password) {
         Toast.makeText(this, ssid + "," + password, Toast.LENGTH_LONG).show();
-        startActivity(new Intent(this, APDetailActivity.class));
+        WifiPasswordHolder.getInstance().setPassword(APManager.getApManager(this).getPassword());
+        //startActivity(new Intent(this, APDetailActivity.class));
+        startActivity(new Intent(this, BleBroadcastActivity.class));
     }
 
 

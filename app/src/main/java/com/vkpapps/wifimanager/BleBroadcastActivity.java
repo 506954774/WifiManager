@@ -14,6 +14,7 @@ import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseData;
 import android.bluetooth.le.AdvertiseSettings;
 import android.bluetooth.le.BluetoothLeAdvertiser;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.ParcelUuid;
@@ -24,15 +25,18 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.vkpapps.apmanager.APManager;
 import com.vkpapps.wifimanager.util.StringUtil;
 
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatTextView;
 
 /**
- * Main4Activity
+ * BleBroadcastActivity
+ * 使用蓝牙5.0的广播，将热点的wifi密码发送出去
  * Created By:Chuck
  * Des:
  * on 2022/11/15 10:36
@@ -66,6 +70,14 @@ public class BleBroadcastActivity extends AppCompatActivity implements View.OnCl
         initView();
         initBLE();
         setServer();
+
+        //一秒之后，开始广播
+        btnStart.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                onClick(btnStart);
+            }
+        },1000);
     }
 
     private void initView() {
@@ -77,8 +89,28 @@ public class BleBroadcastActivity extends AppCompatActivity implements View.OnCl
         btnStart.setOnClickListener(this);
         btnStop.setOnClickListener(this);
 
-        btnNotify.setVisibility(View.INVISIBLE);
-        //btnStop.setVisibility(View.INVISIBLE);
+        //btnNotify.setVisibility(View.GONE);
+        //btnStop.setVisibility(View.GONE);
+
+
+        APManager apManager = APManager.getApManager(this);
+
+        AppCompatTextView textView = findViewById(R.id.apDetail);
+        String sb ="热点开启成功！"+
+                System.lineSeparator()+
+                "热点 : " + apManager.getSSID() +
+                System.lineSeparator() +
+                "密码 : " +
+                apManager.getPassword();
+        textView.setText(sb);
+
+
+        //关闭热点，并停止蓝牙广播
+        findViewById(R.id.btnTurnOff).setOnClickListener(v -> {
+            apManager.disableWifiAp();
+            stopAdvertise();
+            finish();
+        });
     }
 
 

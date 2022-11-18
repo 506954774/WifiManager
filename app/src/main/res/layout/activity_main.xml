@@ -24,7 +24,7 @@
             android:id="@+id/btnTurnOn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/turn_on_ap"
+            android:text="开启热点"
             android:background="@color/teal_700"
             android:textColor="@color/white"/>
 
@@ -33,6 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="开启蓝牙广播"
+            android:visibility="gone"
             android:layout_marginTop="60dp"
             android:background="@color/teal_700"
             android:textColor="@color/white"/>
@@ -47,6 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="连接wifi"
+            android:visibility="gone"
             android:background="@color/teal_700"
             android:textColor="@color/white"/>
 

@@ -28,7 +28,7 @@
             android:label="AP Detail"/>
         <activity
             android:name=".MainActivity"
-            android:label="Create AP">
+            android:label="Hotspot">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
 
@@ -48,7 +48,7 @@
 
         <activity
             android:name=".BleBroadcastActivity"
-            android:label="发出蓝牙广播">
+            android:label="开启热点-蓝牙广播">
 
 
 
