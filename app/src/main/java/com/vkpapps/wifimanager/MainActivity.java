@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat;
 
 import com.vkpapps.apmanager.APManager;
 import com.vkpapps.apmanager.DefaultFailureListener;
+import com.vkpapps.services.MyService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,6 +33,9 @@ public class MainActivity extends AppCompatActivity implements APManager.OnSucce
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
 
         findViewById(R.id.btnTurnOn).setOnClickListener(v -> {
             //获取权限
@@ -91,6 +95,11 @@ public class MainActivity extends AppCompatActivity implements APManager.OnSucce
     }
 
     private void creatHotspot(){
+
+        // 启动service
+        Intent mIntent=new Intent(MainActivity.this, MyService.class) ;
+        startService(mIntent);
+
         BluetoothManager systemService = (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
         BluetoothAdapter mBluetoothAdapter = systemService.getAdapter();
 
@@ -106,6 +115,8 @@ public class MainActivity extends AppCompatActivity implements APManager.OnSucce
                 this,
                 new DefaultFailureListener(this)
         );
+
+
     }
 
     private void go2ConnectWifiAuto(){

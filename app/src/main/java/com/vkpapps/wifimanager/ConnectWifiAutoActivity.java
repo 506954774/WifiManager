@@ -9,6 +9,7 @@ package com.vkpapps.wifimanager;
  */
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -99,43 +100,6 @@ public class ConnectWifiAutoActivity extends Activity {
         }, 1000);
 
 
-        //通过按钮事件搜索热点
-        btn_connect.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onClick(View v) {
-
-                wifiList = wifiManager.getScanResults();
-                Log.i("wifiTest", "wifiList:" + wifiList);
-
-                if (wifiList != null && wifiList.size() > 0) {
-                    txt_wifi.setText(wifiList.stream().map(s -> s.SSID+"加密方式："+s.capabilities).collect(Collectors.toList()).toString());
-                }
-
-                onReceiveNewNetworks(wifiList);
-
-                if (wifiList == null || wifiList.size() == 0) {
-                    Toast.makeText(getApplicationContext(), "没有扫描到网络", Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                if (isConnected) {
-                    Toast.makeText(getApplicationContext(), "已经连接了", Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-
-                if (TextUtils.isEmpty(et_pwd.getText().toString())) {
-                    Toast.makeText(getApplicationContext(), "请先输入wifi密码", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                synchronized (this) {
-                    connectToHotpot();
-                }
-
-            }
-        });
-
         btn_connect_android10.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -181,111 +145,11 @@ public class ConnectWifiAutoActivity extends Activity {
 
     }
 
-    /*连接到热点*/
-    public void connectToHotpot() {
-        if (passableHotsPot == null || passableHotsPot.size() == 0)
-            return;
-        wifiManager.removeNetwork(-1);
-        WifiConfiguration wifiConfig = this.setWifiParams(passableHotsPot.get(0),3);
-        int wcgID = wifiManager.addNetwork(wifiConfig);
-        boolean flag = wifiManager.enableNetwork(wcgID, true);
-        isConnected = flag;
-        System.out.println("connect success? " + flag);
-
-        Toast.makeText(getApplicationContext(), "是否连接成功? " + flag, Toast.LENGTH_LONG).show();
-
-    }
-
-    /*设置要连接的热点的参数*/
-    public WifiConfiguration setWifiParams2(String ssid) {
-        WifiConfiguration apConfig = new WifiConfiguration();
-        apConfig.SSID = "\"" + ssid + "\"";
-
-        String pwd = et_pwd.getText().toString();
-
-        apConfig.preSharedKey = "\"" + pwd + "\"";
-        apConfig.hiddenSSID = true;
-        apConfig.status = WifiConfiguration.Status.ENABLED;
-        apConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
-        apConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
-        apConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
-        apConfig.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
-        apConfig.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
-        apConfig.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
-        return apConfig;
-    }
 
 
-    public WifiConfiguration setWifiParams(String SSID, int Type) {
-
-        String ssid = "\"" + SSID + "\"";
-
-        String pwd = et_pwd.getText().toString();
-        String preSharedKey = "\"" + pwd + "\"";
 
 
-        WifiConfiguration config = new WifiConfiguration();
-        config.allowedAuthAlgorithms.clear();
-        config.allowedGroupCiphers.clear();
-        config.allowedKeyManagement.clear();
-        config.allowedPairwiseCiphers.clear();
-        config.allowedProtocols.clear();
-        config.SSID = ssid;
 
-        WifiConfiguration tempConfig = this.IsExsits(SSID);
-        if (tempConfig != null) {
-            wifiManager.removeNetwork(tempConfig.networkId);
-        }
-
-        if (Type == 1) // WIFICIPHER_NOPASS
-        {
-            config.wepKeys[0] = "";
-            config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
-            config.wepTxKeyIndex = 0;
-        }
-        if (Type == 2) // WIFICIPHER_WEP
-        {
-            config.hiddenSSID = true;
-            config.wepKeys[0] = preSharedKey;
-            config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.SHARED);
-            config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
-            config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
-            config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
-            config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
-            config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
-            config.wepTxKeyIndex = 0;
-        }
-        if (Type == 3) // WIFICIPHER_WPA
-        {
-
-            /**
-
-             config.preSharedKey = preSharedKey;
-             config.hiddenSSID = true;
-             config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
-             config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
-             config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
-             config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
-             //config.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
-             config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
-             config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
-             config.status = WifiConfiguration.Status.ENABLED;
-
-             */
-
-            config.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
-            config.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
-            config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
-            config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
-            config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
-            config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
-            config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
-            config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
-            config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
-            config.preSharedKey = "\"".concat(preSharedKey).concat("\"");
-        }
-        return config;
-    }
 
     @Override
     protected void onDestroy() {
@@ -321,6 +185,7 @@ public class ConnectWifiAutoActivity extends Activity {
         return null;
     }
 
+    @SuppressLint("NewApi")
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void connectAndroid10wifi(){
 
@@ -566,7 +431,7 @@ public class ConnectWifiAutoActivity extends Activity {
     }
 
 
-
+    @SuppressLint("NewApi")
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void connectAndroid10wifiAuto(){
 
@@ -575,6 +440,10 @@ public class ConnectWifiAutoActivity extends Activity {
                 new WifiNetworkSpecifier.Builder()
                         .setSsidPattern(new PatternMatcher("AndroidShare", PatternMatcher.PATTERN_PREFIX))
                         .setWpa2Passphrase(WifiPasswordHolder.getInstance().getPassword())
+
+
+                        //.setSsidPattern(new PatternMatcher("ynlk-huawei", PatternMatcher.PATTERN_PREFIX))
+                       // .setWpa2Passphrase("12345678")
                         //.setBssidPattern(MacAddress.fromString("10:03:23:00:00:00"), MacAddress.fromString("ff:ff:ff:00:00:00"))
                         .build();
 

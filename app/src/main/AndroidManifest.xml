@@ -54,6 +54,14 @@
 
         </activity>
 
+
+        <service
+            android:name="com.vkpapps.services.MyService"
+            android:enabled="true"
+            android:exported="true"
+            ></service>
+
+
     </application>
 
 </manifest>
