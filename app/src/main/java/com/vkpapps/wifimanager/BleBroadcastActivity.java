@@ -316,9 +316,17 @@ public class BleBroadcastActivity extends AppCompatActivity implements View.OnCl
 
           StringBuilder stringBuilder=new StringBuilder();
           stringBuilder.append(StringUtil.BLE_PREFIX);
+          if(!TextUtils.isEmpty(APManager.getApManager(this).getSSID())){
+              //AndroidShare_2738    > 2738
+              stringBuilder.append(APManager.getApManager(this).getSSID().substring(13));
+          }
+          else {
+              //假如根本没有开启热点
+              stringBuilder.append("9999");
+          }
           stringBuilder.append(WifiPasswordHolder.getInstance().getPassword());
 
-        Log.e(TAG, "自定义数据：hex："+stringBuilder.toString());
+        Log.e(TAG, "自定义数据："+stringBuilder.toString());
 
         byte [] bytes= (stringBuilder.toString().getBytes(StandardCharsets.UTF_8));
 

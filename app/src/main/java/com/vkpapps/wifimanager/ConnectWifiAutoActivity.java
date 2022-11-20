@@ -194,7 +194,7 @@ public class ConnectWifiAutoActivity extends Activity {
 
         final NetworkSpecifier specifier =
                 new WifiNetworkSpecifier.Builder()
-                        .setSsidPattern(new PatternMatcher("AndroidShare", PatternMatcher.PATTERN_PREFIX))
+                        .setSsidPattern(new PatternMatcher(WifiPasswordHolder.getInstance().getSsid(), PatternMatcher.PATTERN_PREFIX))
                         .setWpa2Passphrase(pwd)
                         //.setBssidPattern(MacAddress.fromString("10:03:23:00:00:00"), MacAddress.fromString("ff:ff:ff:00:00:00"))
                         .build();
@@ -406,9 +406,19 @@ public class ConnectWifiAutoActivity extends Activity {
                         //命中我们的数据
                         if(dataString.startsWith(StringUtil.BLE_PREFIX)){
                             //llkjsdf321e62b5d5
-                            String wifiPassword=dataString.substring(5,17);
+
+                            //llkjs9999df321e62b5d5
+                            String ssid=dataString.substring(5,9);
+                            ssid="AndroidShare_"+ssid;
+                            String wifiPassword=dataString.substring(9,21);
                             Toast.makeText(getApplicationContext(),"wifi密码："+wifiPassword,Toast.LENGTH_SHORT).show();
+                            WifiPasswordHolder.getInstance().setSsid(ssid);
                             WifiPasswordHolder.getInstance().setPassword(wifiPassword);
+
+                            Log.e(TAG, "ssid："+ssid);
+
+                            Log.e(TAG, "wifiPassword："+wifiPassword);
+
                             et_pwd.setText(wifiPassword);
                         }
 
@@ -438,7 +448,7 @@ public class ConnectWifiAutoActivity extends Activity {
 
         final NetworkSpecifier specifier =
                 new WifiNetworkSpecifier.Builder()
-                        .setSsidPattern(new PatternMatcher("AndroidShare", PatternMatcher.PATTERN_PREFIX))
+                        .setSsidPattern(new PatternMatcher(WifiPasswordHolder.getInstance().getSsid(), PatternMatcher.PATTERN_PREFIX))
                         .setWpa2Passphrase(WifiPasswordHolder.getInstance().getPassword())
 
 

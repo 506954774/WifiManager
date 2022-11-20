@@ -10,6 +10,15 @@ public class WifiPasswordHolder {
     private static final WifiPasswordHolder ourInstance = new WifiPasswordHolder();
 
     private String password;
+    private String ssid;
+
+    public String getSsid() {
+        return ssid;
+    }
+
+    public void setSsid(String ssid) {
+        this.ssid = ssid;
+    }
 
     public String getPassword() {
         return password;
